@@ -277,11 +277,11 @@
 <script>
     let hasilTeksUntukDisalin = "";
 
-    // Daftar Bank & E-Wallet Terlengkap
+    // Daftar Bank & E-Wallet Lengkap
     const LIST_BANK = [
-        'BCA', 'MANDIRI', 'BRI', 'BNI', 'CIMB', 'DANAMON', 'PERMATA', 
+        'BSI', 'BCA', 'MANDIRI', 'BRI', 'BNI', 'CIMB', 'DANAMON', 'PERMATA', 
         'DANA', 'OVO', 'GOPAY', 'SEABANK', 'NEO', 'SHOPEEPAY', 'LINKAJA', 
-        'PANIN', 'MAYBANK', 'BTNM', 'BTN', 'BSI', 'JAGO', 'BLU', 'BSIM', 'OCBC'
+        'PANIN', 'MAYBANK', 'BTNM', 'BTN', 'JAGO', 'BLU', 'BSIM', 'OCBC'
     ];
 
     function konversiLog() {
@@ -293,7 +293,7 @@
         if (!input) return;
 
         let baris = input.split('\n'); 
-        baris.reverse(); // Dibalik agar urutan waktu teratas menjadi terbaru
+        baris.reverse(); 
 
         let barisDataDisalin = [];
 
@@ -301,44 +301,39 @@
             let cleanLine = line.trim();
             if (!cleanLine) return;
 
-            // 1. EKSTRAKSI WAKTU (Mencari pola jam HH:MM:SS atau HH:MM)
+            // 1. EKSTRAKSI WAKTU
             let waktu = "00:00:00";
             let matchWaktu = cleanLine.match(/\b(?:[01]?\d|2[0-3]):[0-5]\d(?::[0-5]\d)?\b/);
             if (matchWaktu) {
                 waktu = matchWaktu[0];
             }
 
-            // 2. EKSTRAKSI BANK (Pencarian independen pada seluruh teks)
+            // 2. EKSTRAKSI BANK (Langsung deteksi kata bank tanpa batasan regex ketat)
             let tujuanBank = "-";
             let lineUpper = cleanLine.toUpperCase();
             
             for (let bank of LIST_BANK) {
-                // Regex mencakup kata berdiri sendiri atau tersambung simbol (seperti BCA_VA, BANK-BRI, MANDIRI/ONLINE)
-                let regexBank = new RegExp(`(?:^|[^A-Z0-9])${bank}(?:[^A-Z0-9]|$)`, 'i');
-                if (regexBank.test(lineUpper)) {
+                if (lineUpper.includes(bank)) {
                     tujuanBank = bank;
                     break;
                 }
             }
 
-            // 3. EKSTRAKSI JUMLAH (Mencari angka nominal uang, baik berformat 50000, 50.000, atau 50,000)
+            // 3. EKSTRAKSI JUMLAH
             let jumlah = "0";
-            // Memecah berdasarkan spasi atau tab
             let elemen = cleanLine.split(/\s+/);
             
             for (let i = elemen.length - 1; i >= 0; i--) {
                 let str = elemen[i].trim();
-                // Menghilangkan format pemisah ribuan titik/koma untuk cek angka
                 let numOnly = str.replace(/[^0-9]/g, '');
                 
-                // Pastikan minimal 3 digit (misal: 100 ke atas) dan bukan bagian dari Jam/Waktu
                 if (numOnly.length >= 3 && !str.includes(':')) {
                     jumlah = str;
                     break;
                 }
             }
 
-            // 4. EKSTRAKSI USER ID (Menyaring elemen yang BUKAN Waktu, Bank, atau Jumlah)
+            // 4. EKSTRAKSI USER ID
             let userId = "-";
             let kandidatUser = elemen.filter(item => {
                 let itemUpper = item.toUpperCase();
@@ -351,24 +346,19 @@
             });
 
             if (kandidatUser.length > 0) {
-                // Membersihkan simbol tidak penting dari User ID
                 userId = kandidatUser[0].replace(/[^\w.-]/g, ''); 
             }
 
-            // Kolom CREDIT dibiarkan kosong
             let creditStatus = ""; 
 
-            // Tampilan Badge Bank di Tabel
             const bankHtml = (tujuanBank !== "-") 
                 ? `<span class="bank-badge">${tujuanBank}</span>` 
                 : `<span class="bank-badge empty">-</span>`;
 
-            // Append Row ke Tabel
             const tr = document.createElement('tr');
             tr.innerHTML = `<td>${waktu}</td><td>${userId || '-'}</td><td>${bankHtml}</td><td>${creditStatus}</td><td>${jumlah}</td>`;
             tbody.appendChild(tr);
 
-            // Format Salinan Clipboard (\t\t menyisakan 1 kolom kosong untuk CREDIT di Spreadsheet)
             barisDataDisalin.push(`${waktu}\t${userId || '-'}\t${tujuanBank}\t\t${jumlah}`);
         });
 
