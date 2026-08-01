@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="only dark">
-    <title>Rumus Flop Kasir - Ultra Luxury Edition v2</title>
+    <title>Rumus Flop Kasir - Ultra Precision Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     
 <style>
     :root {
         color-scheme: only dark !important;
         --gold-primary: #f1c40f;
-        --gold-accent: #e67e22;
         --gold-light: #fef5e7;
         --gold-gradient: linear-gradient(135deg, #f39c12 0%, #f1c40f 50%, #d35400 100%);
-        --bg-glass: rgba(15, 20, 28, 0.85);
-        --card-border: rgba(241, 196, 15, 0.3);
+        --bg-glass: rgba(13, 17, 24, 0.88);
+        --card-border: rgba(241, 196, 15, 0.35);
     }
 
     * {
@@ -44,7 +43,6 @@
         align-items: center;
     }
 
-    /* KARTU UTAMA GLASSMORPHISM */
     .container {
         position: relative;
         background: var(--bg-glass) !important;
@@ -60,7 +58,6 @@
         margin: auto;
     }
 
-    /* ANIMASI SHIMMER EMAS */
     @keyframes goldShimmer {
         0% { background-position: -200% center; }
         100% { background-position: 200% center; }
@@ -118,7 +115,7 @@
         font-size: 13px;
         margin-bottom: 28px;
         user-select: text;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.3s ease;
     }
 
     textarea:focus {
@@ -150,7 +147,6 @@
         text-transform: uppercase;
         border: 1px solid transparent;
         transition: all 0.25s ease;
-        overflow: hidden;
     }
 
     .btn-copy { 
@@ -182,13 +178,11 @@
         transform: translateY(1px) scale(0.98) !important;
     }
     
-    /* TABEL HASIL */
     .table-container { 
         overflow-x: auto; 
         border-radius: 14px;
         border: 1px solid rgba(241, 196, 15, 0.2) !important;
         background-color: rgba(6, 9, 14, 0.75) !important;
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
     }
     
     table {
@@ -230,7 +224,6 @@
         color: #ffffff !important;
     }
 
-    /* BADGE BANK EKSTRA MEWAH */
     .bank-badge {
         display: inline-block;
         padding: 4px 10px;
@@ -254,7 +247,7 @@
 
 <div class="container">
     <h1>Rumus Flop Kasir</h1>
-    <div class="sub-title">Ultra Luxury Edition v2</div>
+    <div class="sub-title">Ultra Precision Edition</div>
 
     <label for="rawInput">Tempel Log Transaksi</label>
     <textarea id="rawInput" placeholder="Tempelkan log transaksi di sini..." oninput="konversiLog()" onpaste="setTimeout(konversiLog, 50)"></textarea>
@@ -284,11 +277,11 @@
 <script>
     let hasilTeksUntukDisalin = "";
 
-    // Daftar Bank & E-Wallet Lengkap (Termasuk variasi penulisan umum)
+    // Daftar Bank & E-Wallet Terlengkap
     const LIST_BANK = [
         'BCA', 'MANDIRI', 'BRI', 'BNI', 'CIMB', 'DANAMON', 'PERMATA', 
         'DANA', 'OVO', 'GOPAY', 'SEABANK', 'NEO', 'SHOPEEPAY', 'LINKAJA', 
-        'PANIN', 'MAYBANK', 'BTNM', 'BTN', 'BSI', 'JAGO', 'BLU'
+        'PANIN', 'MAYBANK', 'BTNM', 'BTN', 'BSI', 'JAGO', 'BLU', 'BSIM', 'OCBC'
     ];
 
     function konversiLog() {
@@ -300,75 +293,83 @@
         if (!input) return;
 
         let baris = input.split('\n'); 
-        baris.reverse(); 
+        baris.reverse(); // Dibalik agar urutan waktu teratas menjadi terbaru
 
         let barisDataDisalin = [];
 
         baris.forEach(line => {
-            if (line.trim() === '') return;
+            let cleanLine = line.trim();
+            if (!cleanLine) return;
 
-            // 1. Ekstraksi Waktu (HH:MM:SS atau HH:MM)
+            // 1. EKSTRAKSI WAKTU (Mencari pola jam HH:MM:SS atau HH:MM)
             let waktu = "00:00:00";
-            let matchWaktu = line.match(/\b\d{2}:\d{2}(?::\d{2})?\b/);
-            if (matchWaktu) waktu = matchWaktu[0];
+            let matchWaktu = cleanLine.match(/\b(?:[01]?\d|2[0-3]):[0-5]\d(?::[0-5]\d)?\b/);
+            if (matchWaktu) {
+                waktu = matchWaktu[0];
+            }
 
-            // 2. Ekstraksi Bank (Memeriksa seluruh baris tanpa tergantung pemisahan spasi)
+            // 2. EKSTRAKSI BANK (Pencarian independen pada seluruh teks)
             let tujuanBank = "-";
-            let lineUpper = line.toUpperCase();
+            let lineUpper = cleanLine.toUpperCase();
             
             for (let bank of LIST_BANK) {
-                // Mencari nama bank sebagai kata utuh atau bagian dari nama transaksi (misal: BCA_VA)
-                let regexBank = new RegExp(`\\b${bank}\\b|${bank}_|_${bank}`, 'i');
+                // Regex mencakup kata berdiri sendiri atau tersambung simbol (seperti BCA_VA, BANK-BRI, MANDIRI/ONLINE)
+                let regexBank = new RegExp(`(?:^|[^A-Z0-9])${bank}(?:[^A-Z0-9]|$)`, 'i');
                 if (regexBank.test(lineUpper)) {
                     tujuanBank = bank;
                     break;
                 }
             }
 
-            // Pemisahan kolom untuk User ID & Jumlah
-            let kolom = line.split(/\s+/).filter(item => item.trim() !== '');
-
-            // 3. Ekstraksi Jumlah (Angka terakhir pada baris yang bernilai >= 3 digit)
+            // 3. EKSTRAKSI JUMLAH (Mencari angka nominal uang, baik berformat 50000, 50.000, atau 50,000)
             let jumlah = "0";
-            for (let i = kolom.length - 1; i >= 0; i--) {
-                let nilaiBersih = kolom[i].replace(/[,.-]/g, '').trim();
-                if (nilaiBersih !== '' && !isNaN(nilaiBersih) && nilaiBersih.length >= 3 && kolom[i] !== waktu) {
-                    jumlah = kolom[i];
+            // Memecah berdasarkan spasi atau tab
+            let elemen = cleanLine.split(/\s+/);
+            
+            for (let i = elemen.length - 1; i >= 0; i--) {
+                let str = elemen[i].trim();
+                // Menghilangkan format pemisah ribuan titik/koma untuk cek angka
+                let numOnly = str.replace(/[^0-9]/g, '');
+                
+                // Pastikan minimal 3 digit (misal: 100 ke atas) dan bukan bagian dari Jam/Waktu
+                if (numOnly.length >= 3 && !str.includes(':')) {
+                    jumlah = str;
                     break;
                 }
             }
 
-            // 4. Ekstraksi User ID
+            // 4. EKSTRAKSI USER ID (Menyaring elemen yang BUKAN Waktu, Bank, atau Jumlah)
             let userId = "-";
-            let kandidatUser = kolom.filter(k => {
-                let kClean = k.replace(/[,.-]/g, '').trim();
-                let isWaktu = k.includes(':');
-                let isJumlah = (k === jumlah);
-                let isBank = LIST_BANK.some(b => k.toUpperCase().includes(b));
-                return !isWaktu && !isJumlah && !isBank && isNaN(kClean);
+            let kandidatUser = elemen.filter(item => {
+                let itemUpper = item.toUpperCase();
+                let isWaktu = item.includes(':');
+                let isJumlah = (item === jumlah);
+                let isBank = LIST_BANK.some(b => itemUpper.includes(b));
+                let isAngkaMurni = !isNaN(item.replace(/[^0-9]/g, '')) && item.replace(/[^0-9]/g, '').length >= 3;
+
+                return !isWaktu && !isJumlah && !isBank && !isAngkaMurni && item.length >= 2;
             });
 
             if (kandidatUser.length > 0) {
-                userId = kandidatUser[0]; 
-            } else if (kolom.length >= 2) {
-                // Fallback sederhana jika tidak ditemukan kandidat ideal
-                userId = kolom.find(k => k !== waktu && k !== jumlah) || "-";
+                // Membersihkan simbol tidak penting dari User ID
+                userId = kandidatUser[0].replace(/[^\w.-]/g, ''); 
             }
 
             // Kolom CREDIT dibiarkan kosong
             let creditStatus = ""; 
 
-            // Render ke tabel HTML (Gunakan Badge jika bank ditemukan)
+            // Tampilan Badge Bank di Tabel
             const bankHtml = (tujuanBank !== "-") 
                 ? `<span class="bank-badge">${tujuanBank}</span>` 
                 : `<span class="bank-badge empty">-</span>`;
 
+            // Append Row ke Tabel
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${waktu}</td><td>${userId}</td><td>${bankHtml}</td><td>${creditStatus}</td><td>${jumlah}</td>`;
+            tr.innerHTML = `<td>${waktu}</td><td>${userId || '-'}</td><td>${bankHtml}</td><td>${creditStatus}</td><td>${jumlah}</td>`;
             tbody.appendChild(tr);
 
-            // Tab ganda (\t\t) agar kolom CREDIT terlewati saat di-paste ke Excel
-            barisDataDisalin.push(`${waktu}\t${userId}\t${tujuanBank}\t\t${jumlah}`);
+            // Format Salinan Clipboard (\t\t menyisakan 1 kolom kosong untuk CREDIT di Spreadsheet)
+            barisDataDisalin.push(`${waktu}\t${userId || '-'}\t${tujuanBank}\t\t${jumlah}`);
         });
 
         hasilTeksUntukDisalin = barisDataDisalin.join('\n');
