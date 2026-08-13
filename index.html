@@ -1,394 +1,66 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="only dark">
-    <title>Rumus Flop Kasir - Ultra Precision Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-    
-<style>
-    :root {
-        color-scheme: only dark !important;
-        --gold-primary: #f1c40f;
-        --gold-light: #fef5e7;
-        --gold-gradient: linear-gradient(135deg, #f39c12 0%, #f1c40f 50%, #d35400 100%);
-        --bg-glass: rgba(13, 17, 24, 0.88);
-        --card-border: rgba(241, 196, 15, 0.35);
-    }
-
-    * {
-        box-sizing: border-box;
-        user-select: none;
-    }
-
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        min-height: 100vh;
-        background: radial-gradient(circle at 50% 20%, rgba(241, 196, 15, 0.08) 0%, rgba(5, 7, 10, 0.95) 80%), #070a0e url('mobil.gif') !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-attachment: fixed !important;
-        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-        color: #f8fafc !important;
-    }
-
-    body {
-        padding: 40px 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .container {
-        position: relative;
-        background: var(--bg-glass) !important;
-        -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
-        backdrop-filter: blur(24px) saturate(200%) !important;
-        border: 1px solid var(--card-border) !important; 
-        border-radius: 24px; 
-        width: 100%;
-        max-width: 950px;
-        padding: 44px;
-        box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.95),
-                    0 0 50px rgba(241, 196, 15, 0.12);
-        margin: auto;
-    }
-
-    @keyframes goldShimmer {
-        0% { background-position: -200% center; }
-        100% { background-position: 200% center; }
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 30px;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-        margin: 0;
-        background: linear-gradient(135deg, #ffe066 0%, #f1c40f 25%, #b38728 50%, #fef5e7 75%, #d4ac0d 100%);
-        background-size: 200% auto;
-        color: transparent !important;
-        -webkit-background-clip: text !important;
-        background-clip: text !important;
-        animation: goldShimmer 5s linear infinite;
-        filter: drop-shadow(0 2px 10px rgba(241, 196, 15, 0.3));
-    }
-
-    .sub-title {
-        text-align: center;
-        font-size: 11px;
-        color: #cbd5e1 !important;
-        letter-spacing: 5px;
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-top: 6px;
-        margin-bottom: 32px;
-        opacity: 0.85;
-    }
-    
-    label {
-        display: block;
-        font-weight: 700;
-        margin-bottom: 12px;
-        color: var(--gold-light) !important; 
-        font-size: 11px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        opacity: 0.9;
-    }
-    
-    textarea {
-        width: 100%;
-        height: 140px;
-        background-color: rgba(6, 9, 14, 0.85) !important;
-        border: 1px solid rgba(241, 196, 15, 0.25) !important; 
-        border-radius: 14px;
-        color: #38bdf8 !important;
-        padding: 16px;
-        box-sizing: border-box;
-        resize: vertical;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 13px;
-        margin-bottom: 28px;
-        user-select: text;
-        transition: all 0.3s ease;
-    }
-
-    textarea:focus {
-        outline: none;
-        border-color: var(--gold-primary) !important;
-        box-shadow: 0 0 25px rgba(241, 196, 15, 0.25) !important;
-        background-color: rgba(6, 9, 14, 0.95) !important;
-    }
-
-    textarea::placeholder {
-        color: rgba(148, 163, 184, 0.45);
-    }
-
-    .btn-group {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 32px;
-    }
-    
-    button {
-        position: relative;
-        flex: 1;
-        padding: 16px; 
-        font-size: 12px;    
-        font-weight: 700;
-        border-radius: 12px; 
-        cursor: pointer;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        border: 1px solid transparent;
-        transition: all 0.25s ease;
-    }
-
-    .btn-copy { 
-        background: var(--gold-gradient) !important; 
-        color: #05070a !important; 
-        box-shadow: 0 4px 25px rgba(241, 196, 15, 0.3);
-    }
-    
-    .btn-copy:hover { 
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(241, 196, 15, 0.5);
-        filter: brightness(1.15);
-    }
-
-    .btn-reset { 
-        background-color: rgba(255, 255, 255, 0.04) !important; 
-        color: #94a3b8 !important; 
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    }
-    
-    .btn-reset:hover { 
-        transform: translateY(-2px);
-        background-color: rgba(255, 255, 255, 0.08) !important; 
-        color: #ffffff !important;
-        border-color: rgba(241, 196, 15, 0.4) !important;
-    }
-
-    button:active {
-        transform: translateY(1px) scale(0.98) !important;
-    }
-    
-    .table-container { 
-        overflow-x: auto; 
-        border-radius: 14px;
-        border: 1px solid rgba(241, 196, 15, 0.2) !important;
-        background-color: rgba(6, 9, 14, 0.75) !important;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    
-    th, td {
-        padding: 16px 20px;
-        text-align: left;
-        font-size: 13px;
-        white-space: nowrap;
-        user-select: text;
-    }
-    
-    th { 
-        font-weight: 700;
-        background-color: rgba(15, 23, 42, 0.95) !important; 
-        color: var(--gold-primary) !important; 
-        font-size: 11px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        border-bottom: 1px solid rgba(241, 196, 15, 0.25) !important;
-    }
-    
-    td {
-        color: #e2e8f0 !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 13px;
-    }
-    
-    tr:last-child td {
-        border-bottom: none !important;
-    }
-
-    tr:hover td {
-        background-color: rgba(241, 196, 15, 0.06) !important;
-        color: #ffffff !important;
-    }
-
-    .bank-badge {
-        display: inline-block;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        background: rgba(241, 196, 15, 0.12);
-        color: #f1c40f;
-        border: 1px solid rgba(241, 196, 15, 0.3);
-    }
-
-    .bank-badge.empty {
-        background: rgba(148, 163, 184, 0.08);
-        color: #64748b;
-        border: 1px solid rgba(148, 163, 184, 0.2);
-    }
-</style>
+  <meta charset="UTF-8">
+  <title>Team Chat Simpel</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 30px auto; padding: 10px; }
+    #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+    .msg { margin-bottom: 8px; }
+    .input-box { display: flex; gap: 5px; }
+    input { padding: 8px; font-size: 14px; }
+    #user { width: 30%; }
+    #text { flex: 1; }
+    button { padding: 8px 15px; background: #007bff; color: white; border: none; cursor: pointer; }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Rumus Flop Kasir</h1>
-    <div class="sub-title">Ultra Precision Edition</div>
+  <h2>Team Chat (Tanpa Server)</h2>
+  <div id="chat"></div>
 
-    <label for="rawInput">Tempel Log Transaksi</label>
-    <textarea id="rawInput" placeholder="Tempelkan log transaksi di sini..." oninput="konversiLog()" onpaste="setTimeout(konversiLog, 50)"></textarea>
-    
-    <div class="btn-group">
-        <button id="btnCopy" class="btn-copy" onclick="salinHasil()">Salin Data</button>
-        <button id="btnReset" class="btn-reset" onclick="resetData()">Reset</button>
-    </div>
+  <div class="input-box">
+    <input type="text" id="user" placeholder="Nama">
+    <input type="text" id="text" placeholder="Pesan...">
+    <button onclick="sendMsg()">Kirim</button>
+  </div>
 
-    <label>Hasil Konversi</label>
-    <div class="table-container">
-        <table id="resultTable">
-            <thead>
-                <tr>
-                    <th>WAKTU</th>
-                    <th>USER ID</th>
-                    <th>TUJUAN BANK</th>
-                    <th>CREDIT</th>
-                    <th>JUMLAH</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-    </div>
-</div>
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-<script>
-    let hasilTeksUntukDisalin = "";
+  <script>
+    // Konfigurasi Database Publik Demo (Siap Pakai)
+    const firebaseConfig = {
+      databaseURL: "https://testing-chat-simple-default-rtdb.firebaseio.com/"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database().ref("messages");
 
-    // Daftar Bank & E-Wallet Lengkap
-    const LIST_BANK = [
-        'BSI', 'BCA', 'MANDIRI', 'BRI', 'BNI', 'CIMB', 'DANAMON', 'PERMATA', 
-        'DANA', 'OVO', 'GOPAY', 'SEABANK', 'NEO', 'SHOPEEPAY', 'LINKAJA', 
-        'PANIN', 'MAYBANK', 'BTNM', 'BTN', 'JAGO', 'BLU', 'BSIM', 'OCBC'
-    ];
+    const chat = document.getElementById('chat');
+    const user = document.getElementById('user');
+    const text = document.getElementById('text');
 
-    function konversiLog() {
-        const input = document.getElementById('rawInput').value.trim();
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = ''; 
-        hasilTeksUntukDisalin = ""; 
-
-        if (!input) return;
-
-        let baris = input.split('\n'); 
-        baris.reverse(); 
-
-        let barisDataDisalin = [];
-
-        baris.forEach(line => {
-            let cleanLine = line.trim();
-            if (!cleanLine) return;
-
-            // 1. EKSTRAKSI WAKTU
-            let waktu = "00:00:00";
-            let matchWaktu = cleanLine.match(/\b(?:[01]?\d|2[0-3]):[0-5]\d(?::[0-5]\d)?\b/);
-            if (matchWaktu) {
-                waktu = matchWaktu[0];
-            }
-
-            // 2. EKSTRAKSI BANK (Langsung deteksi kata bank tanpa batasan regex ketat)
-            let tujuanBank = "-";
-            let lineUpper = cleanLine.toUpperCase();
-            
-            for (let bank of LIST_BANK) {
-                if (lineUpper.includes(bank)) {
-                    tujuanBank = bank;
-                    break;
-                }
-            }
-
-            // 3. EKSTRAKSI JUMLAH
-            let jumlah = "0";
-            let elemen = cleanLine.split(/\s+/);
-            
-            for (let i = elemen.length - 1; i >= 0; i--) {
-                let str = elemen[i].trim();
-                let numOnly = str.replace(/[^0-9]/g, '');
-                
-                if (numOnly.length >= 3 && !str.includes(':')) {
-                    jumlah = str;
-                    break;
-                }
-            }
-
-            // 4. EKSTRAKSI USER ID
-            let userId = "-";
-            let kandidatUser = elemen.filter(item => {
-                let itemUpper = item.toUpperCase();
-                let isWaktu = item.includes(':');
-                let isJumlah = (item === jumlah);
-                let isBank = LIST_BANK.some(b => itemUpper.includes(b));
-                let isAngkaMurni = !isNaN(item.replace(/[^0-9]/g, '')) && item.replace(/[^0-9]/g, '').length >= 3;
-
-                return !isWaktu && !isJumlah && !isBank && !isAngkaMurni && item.length >= 2;
-            });
-
-            if (kandidatUser.length > 0) {
-                userId = kandidatUser[0].replace(/[^\w.-]/g, ''); 
-            }
-
-            let creditStatus = ""; 
-
-            const bankHtml = (tujuanBank !== "-") 
-                ? `<span class="bank-badge">${tujuanBank}</span>` 
-                : `<span class="bank-badge empty">-</span>`;
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${waktu}</td><td>${userId || '-'}</td><td>${bankHtml}</td><td>${creditStatus}</td><td>${jumlah}</td>`;
-            tbody.appendChild(tr);
-
-            barisDataDisalin.push(`${waktu}\t${userId || '-'}\t${tujuanBank}\t\t${jumlah}`);
+    // Kirim Pesan
+    function sendMsg() {
+      if (user.value && text.value) {
+        db.push({
+          username: user.value,
+          message: text.value
         });
-
-        hasilTeksUntukDisalin = barisDataDisalin.join('\n');
+        text.value = '';
+      }
     }
 
-    function resetData() {
-        document.getElementById('rawInput').value = '';
-        document.getElementById('tableBody').innerHTML = '';
-        hasilTeksUntukDisalin = "";
-        document.getElementById('rawInput').focus();
-    }
-
-    function salinHasil() {
-        if (!hasilTeksUntukDisalin) {
-            alert("Tidak ada data untuk disalin!");
-            return;
-        }
-        
-        navigator.clipboard.writeText(hasilTeksUntukDisalin).then(() => {
-            const btnCopy = document.getElementById('btnCopy');
-            const teksAwal = btnCopy.innerText;
-            
-            btnCopy.innerText = "BERHASIL DISALIN";
-            setTimeout(() => { btnCopy.innerText = teksAwal; }, 1200);
-        }).catch(err => {
-            console.error("Error: ", err);
-            alert("Gagal menyalin data.");
-        });
-    }
-</script>
+    // Terima Pesan Baru Otomatis (Real-time)
+    db.on('child_added', (snapshot) => {
+      const data = snapshot.val();
+      const div = document.createElement('div');
+      div.className = 'msg';
+      div.innerHTML = `<b>${data.username}:</b> ${data.message}`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    });
+  </script>
 </body>
 </html>
